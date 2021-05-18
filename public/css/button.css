@@ -1,0 +1,62 @@
+button {
+    cursor: pointer;
+    display: inline-flex;
+    outline: none;
+    overflow: hidden;
+    position: relative;
+    transition: background-color 360ms ease, transform 360ms ease;
+    align-items: center;
+    flex-shrink: 0;
+    font-family: Roboto Mono;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    justify-content: center;
+    text-decoration: none;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    background-color: rgba(255, 255, 255, 0);
+    outline: none;
+    border: none;
+    overflow: hidden;
+}
+button.button-lg {
+    width: auto;
+    height: 56px;
+    padding: 12px;
+}
+button.icon-button {
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+}
+button.inline {
+    background-color: rgba(255, 255, 255, 0);
+}
+button.icon-button .buttonBase {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    opacity: 0;
+    background-color: rgb(255, 210, 0);
+    transform: scale(0);
+    transition: transform 320ms ease, background-color 320ms ease, opacity 320ms ease;
+}
+button.icon-button:hover .buttonBase {
+    transform: scale(1);
+    opacity: 1;
+    transition: transform 320ms ease, background-color 320ms ease, opacity 240ms ease;
+}
+button.icon-button.active .buttonBase {
+    transform: scale(1);
+    opacity: 1;
+    background-color: rgb(0, 0, 0);
+    transition: transform 320ms ease, background-color 320ms ease, opacity 240ms ease;
+}
+button.button-lg .icon {
+    width: 32px;
+    min-width: 32px;
+    min-height: 32px;
+}

@@ -34,8 +34,7 @@ function onWindowResize() {
 }
 
 function init() {
-  const container = document.createElement('div');
-  document.body.appendChild(container);
+  const container = document.querySelector('#mapContainer');
 
   renderer = new WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
