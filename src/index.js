@@ -7,20 +7,25 @@ import {
   PMREMGenerator,
   Color,
   GridHelper,
+  Clock,
 } from 'three';
 import './main.scss';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module';
 
 const MODELS_PATH = '/public/models/';
 
+const clock = new Clock();
+
 let camera;
 let scene;
 let renderer;
+let controls;
 
 function render() {
+  controls.update(clock.getDelta());
   renderer.render(scene, camera);
 }
 
@@ -71,15 +76,18 @@ function init() {
     render();
   });
 
-  const controls = new OrbitControls(camera, renderer.domElement);
-  controls.addEventListener('change', render);
-  controls.minDistance = 400;
-  controls.maxDistance = 1000;
-  controls.target.set(10, 90, -16);
-  controls.update();
+  controls = new FirstPersonControls(camera, renderer.domElement);
+  controls.movementSpeed = 250;
+  controls.lookSpeed = 0.08;
 
   window.addEventListener('resize', onWindowResize, false);
 }
 
+function animate() {
+  requestAnimationFrame(animate);
+
+  render();
+}
+
 init();
-render();
+animate();
