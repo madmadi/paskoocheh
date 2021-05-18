@@ -1,0 +1,49 @@
+.icon {
+    width: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    -moz-transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.icon * {
+    fill: rgb(0, 0, 0);
+    transition: 240ms ease;
+}
+
+button .icon.burger rect:nth-child(2) {
+    transform: scaleX(0.625);
+    transform-origin: 4px;
+}
+
+.preload button .icon.burger * {
+    transform: scaleX(0);
+    transform-origin: 4px;
+}
+
+button.active .icon * {
+    fill: rgb(255, 255, 255);
+}
+
+button:hover .icon.burger rect:nth-child(2) {
+    transform: scaleX(1);
+}
+
+button.active .icon.burger rect:nth-child(2) {
+    opacity: 0;
+}
+
+button.active .icon.burger rect:nth-child(1) {
+    transform: translate(-1px, 16px) rotate(-45deg);
+}
+
+button.active .icon.burger rect:nth-child(3) {
+    transform: translate(16px, -8px) rotate(45deg);
+}
