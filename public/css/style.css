@@ -188,10 +188,27 @@ article {
     transform: scaleX(0);
     transform-origin: 100%;
     transition: 2000ms cubic-bezier(0.87, 0, 0.13, 1) 320ms;
+    z-index: 1;
 }
 .mapCover.active{
     transform: scaleX(1);
 }
 .preload .mapCover{
     transform: scaleX(1);
+}
+
+
+
+
+#instructions{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,.3);
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
