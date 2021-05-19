@@ -68,6 +68,7 @@ function onKeyDown(event) {
 }
 
 function onKeyUp(event) {
+  walk = false;
   switch (event.code) {
     case 'ArrowUp':
     case 'KeyW':
@@ -93,7 +94,6 @@ function onKeyUp(event) {
 
 
 function render() {
-  // controls.update(clock.getDelta());
   renderer.render(scene, camera);
 }
 
