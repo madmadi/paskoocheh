@@ -7,25 +7,91 @@ import {
   PMREMGenerator,
   Color,
   GridHelper,
-  Clock,
+  Vector3,
+  Raycaster
 } from 'three';
 import './main.scss';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
-import { FirstPersonControls } from 'three/examples/jsm/controls/FirstPersonControls';
+import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module';
 
 const MODELS_PATH = '/public/models/';
 
-const clock = new Clock();
-
 let camera;
 let scene;
 let renderer;
 let controls;
+let raycaster;
+
+let moveForward = false;
+let moveBackward = false;
+let moveLeft = false;
+let moveRight = false;
+let canJump = false;
+
+let prevTime = performance.now();
+const velocity = new Vector3();
+const direction = new Vector3();
+
+function onKeyDown(event) {
+  switch (event.code) {
+    case 'ArrowUp':
+    case 'KeyW':
+      moveForward = true;
+      break;
+
+    case 'ArrowLeft':
+    case 'KeyA':
+      moveLeft = true;
+      break;
+
+    case 'ArrowDown':
+    case 'KeyS':
+      moveBackward = true;
+      break;
+
+    case 'ArrowRight':
+    case 'KeyD':
+      moveRight = true;
+      break;
+
+    case 'Space':
+      if (canJump === true) velocity.y += 350;
+      canJump = false;
+      break;
+    default:
+      break;
+  }
+}
+
+function onKeyUp(event) {
+  switch (event.code) {
+    case 'ArrowUp':
+    case 'KeyW':
+      moveForward = false;
+      break;
+    case 'ArrowLeft':
+    case 'KeyA':
+      moveLeft = false;
+      break;
+    case 'ArrowDown':
+    case 'KeyS':
+      moveBackward = false;
+      break;
+    case 'ArrowRight':
+    case 'KeyD':
+      moveRight = false;
+      break;
+    default:
+      break;
+  }
+}
+
+
 
 function render() {
-  controls.update(clock.getDelta());
+  // controls.update(clock.getDelta());
   renderer.render(scene, camera);
 }
 
@@ -50,7 +116,7 @@ function init() {
   container.appendChild(renderer.domElement);
 
   camera = new PerspectiveCamera(-1000, window.innerWidth / window.innerHeight, 1, 10000);
-  camera.position.set(-500, 1000, 100);
+  camera.position.set(-250, 10, 500);
 
   const environment = new RoomEnvironment();
   const pmremGenerator = new PMREMGenerator(renderer);
@@ -76,17 +142,81 @@ function init() {
     render();
   });
 
-  controls = new FirstPersonControls(camera, renderer.domElement);
-  controls.movementSpeed = 250;
-  controls.lookSpeed = 0.08;
+  controls = new PointerLockControls(camera, document.body);
+  scene.add(controls.getObject());
+
+  const instructions = document.getElementById('instructions');
+
+  controls.addEventListener('lock', () => {
+    instructions.style.display = 'none';
+  });
+
+  controls.addEventListener('unlock', () => {
+    instructions.style.display = '';
+  });
+  instructions.addEventListener('click', () => {
+    controls.lock();
+  });
+
+  document.addEventListener('keydown', onKeyDown);
+  document.addEventListener('keyup', onKeyUp);
+
+  raycaster = new Raycaster(new Vector3(), new Vector3(0, - 1, 0), 0, 10);
 
   window.addEventListener('resize', onWindowResize, false);
 }
 
 function animate() {
+
   requestAnimationFrame(animate);
 
-  render();
+  const time = performance.now();
+
+  if (controls.isLocked === true) {
+
+    raycaster.ray.origin.copy(controls.getObject().position);
+    raycaster.ray.origin.y -= 10;
+
+    const intersections = raycaster.intersectObjects(scene);
+
+    const onObject = intersections.length > 0;
+
+    const delta = (time - prevTime) / 1000;
+
+    velocity.x -= velocity.x * 10.0 * delta;
+    velocity.z -= velocity.z * 10.0 * delta;
+
+    velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+    direction.z = Number(moveForward) - Number(moveBackward);
+    direction.x = Number(moveRight) - Number(moveLeft);
+    direction.normalize(); // this ensures consistent movements in all directions
+
+    if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta;
+    if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta;
+
+    if (onObject === true) {
+      velocity.y = Math.max(0, velocity.y);
+      canJump = true;
+    }
+
+    controls.moveRight(-velocity.x * delta);
+    controls.moveForward(-velocity.z * delta);
+
+    controls.getObject().position.y += (velocity.y * delta); // new behavior
+
+    if (controls.getObject().position.y < 10) {
+      velocity.y = 0;
+      controls.getObject().position.y = 10;
+      canJump = true;
+    }
+
+  }
+
+  prevTime = time;
+
+  renderer.render(scene, camera);
+
 }
 
 init();
