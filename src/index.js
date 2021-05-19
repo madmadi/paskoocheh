@@ -29,12 +29,14 @@ let moveBackward = false;
 let moveLeft = false;
 let moveRight = false;
 let canJump = false;
+let walk = true;
 
 let prevTime = performance.now();
 const velocity = new Vector3();
 const direction = new Vector3();
 
 function onKeyDown(event) {
+  walk = !event.shiftKey;
   switch (event.code) {
     case 'ArrowUp':
     case 'KeyW':
@@ -161,19 +163,17 @@ function init() {
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('keyup', onKeyUp);
 
-  raycaster = new Raycaster(new Vector3(), new Vector3(0, - 1, 0), 0, 10);
+  raycaster = new Raycaster(new Vector3(), new Vector3(0, -1, 0), 0, 10);
 
   window.addEventListener('resize', onWindowResize, false);
 }
 
 function animate() {
-
   requestAnimationFrame(animate);
 
   const time = performance.now();
 
   if (controls.isLocked === true) {
-
     raycaster.ray.origin.copy(controls.getObject().position);
     raycaster.ray.origin.y -= 10;
 
@@ -192,8 +192,8 @@ function animate() {
     direction.x = Number(moveRight) - Number(moveLeft);
     direction.normalize(); // this ensures consistent movements in all directions
 
-    if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta;
-    if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta;
+    if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta * (walk ? 1 : 4);
+    if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta * (walk ? 1 : 4);
 
     if (onObject === true) {
       velocity.y = Math.max(0, velocity.y);
@@ -210,13 +210,11 @@ function animate() {
       controls.getObject().position.y = 10;
       canJump = true;
     }
-
   }
 
   prevTime = time;
 
   renderer.render(scene, camera);
-
 }
 
 init();
