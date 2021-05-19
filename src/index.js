@@ -8,7 +8,7 @@ import {
   Color,
   GridHelper,
   Vector3,
-  Raycaster
+  Raycaster,
 } from 'three';
 import './main.scss';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
@@ -68,7 +68,7 @@ function onKeyDown(event) {
 }
 
 function onKeyUp(event) {
-  walk = false;
+  walk = !event.shiftKey;
   switch (event.code) {
     case 'ArrowUp':
     case 'KeyW':
@@ -90,8 +90,6 @@ function onKeyUp(event) {
       break;
   }
 }
-
-
 
 function render() {
   renderer.render(scene, camera);
