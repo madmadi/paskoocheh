@@ -42,7 +42,7 @@ body {
     min-width: 320px;
     height: 100vh;
     padding: 24px;
-    background-color: rgb(251, 245, 240);
+    background-color: #fbf5f0;
     flex-shrink: 0;
     z-index: 1;
     position: sticky;
@@ -173,29 +173,268 @@ article {
     background-color: #865f2e;
     width: 100%;
     height: 100%;
-    background-image: url("../img/map_mock.jpeg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover
+    filter: sepia(0.18);
+    opacity: 1;
+    user-select: auto;
+    pointer-events: all;
+    transition: opacity 360ms ease;
 }
-.mapCover{
+.noiseContainer {
+    background-image: url(../img/noise.jpg);
+    opacity: 0.3;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    user-select: none;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    z-index: 2;
+}
+.noiseContainer button {
+    user-select: none;
+    pointer-events: none;
+    mix-blend-mode: normal;
+    cursor: pointer;
+}
+.menuBase {
     background-color: rgb(251, 245, 240);
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 0;
     left: 0;
     transform: scaleX(0);
     transform-origin: 100%;
-    transition: 2000ms cubic-bezier(0.87, 0, 0.13, 1) 320ms;
-    z-index: 1;
+    font-family: Playfair Display;
+    font-weight: 900;
+    font-size: 48px;
+    line-height: 1.5;
+    transition: 1200ms cubic-bezier(0.65, 0, 0.35, 1) 1200ms;
+    z-index: 1000;
 }
-.mapCover.active{
+.menuBase.closed {
+    transform: scaleX(0);
+    transition: 800ms cubic-bezier(0.65, 0, 0.35, 1) 128ms;
+}
+.menuBase.opened {
+    transform: scaleX(1);
+    transition: 800ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.preload .menuBase {
     transform: scaleX(1);
 }
-.preload .mapCover{
-    transform: scaleX(1);
+.menuBase a {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(128px);
+    transition: 360ms ease 800ms;
 }
-
-
- 
+.menuBase.opened a {
+    opacity: 1;
+    transform: translateY(0);
+    transition: 360ms ease;
+}
+.menuBase.opened a:nth-child(1) {
+    transition-delay: 800ms;
+}
+.menuBase.opened a:nth-child(2) {
+    transition-delay: 832ms;
+}
+.menuBase.opened a:nth-child(3) {
+    transition-delay: 864ms;
+}
+.menuBase.opened a:nth-child(4) {
+    transition-delay: 896ms;
+}
+.menuBase.closed a {
+    opacity: 0;
+    transform: translateY(128px);
+    transition: 240ms ease;
+}
+.menuBase a::after {
+    cursor: pointer;
+    content: '';
+    display: flex;
+    width: 64px;
+    height: 2px;
+    background-color: rgb(255, 210, 0);
+    justify-self: center;
+    transform: scaleX(0);
+    opacity: 0;
+    transition: 360ms ease;
+}
+.menuBase a:hover:after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0px 80px 0px 80px;
+}
+.sectionHeader {
+    width: 100%;
+    height: 104px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 24px;
+}
+.sectionHeader span {
+    font-family: Roboto Mono;
+    font-size: 14px;
+    line-height: 2;
+    font-weight: 700;
+    margin-left: 16px;
+}
+.sectionHeader button {
+    margin-left: auto;
+}
+.pageContainer h1 {
+    font-family: Playfair Display;
+    font-size: 48px;
+    margin: 32px 0px 16px 0px;
+    line-height: 1.5;
+    font-weight: 900;
+}
+.pageContainer p {
+    font-family: Playfair Display;
+    font-size: 18px;
+    line-height: 32px;
+    max-width: 70%;
+    color: rgba(0, 0, 0, 0.56);
+}
+.aboutContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+    opacity: 1;
+    user-select: auto;
+    pointer-events: all;
+}
+.hide {
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+    transition: opacity 320ms ease;
+}
+.backdrop {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 900;
+    opacity: 1;
+    user-select: auto;
+    pointer-events: all;
+    transition: 360ms ease;
+}
+.backdrop.closed {
+    opacity: 0;
+    user-select: none;
+    pointer-events: none;
+}
+.backdrop.opened {
+    opacity: 1;
+    user-select: auto;
+    pointer-events: all;
+    transition: 360ms ease;
+}
+.backdrop.closed .modalContainer {
+    transform: translateY(128px);
+    opacity: 0;
+    transition: 360ms cubic-bezier(0.65, 0, 0.35, 1) 0ms;
+}
+.backdrop.opened .modalContainer {
+    transform: translateY(0px);
+    opacity: 1;
+    transition: 360ms cubic-bezier(0.65, 0, 0.35, 1) 360ms;
+}
+.modalContainer {
+    width: 520px;
+    height: auto;
+    backdrop-filter: blur(8px);
+    background: rgba(251, 245, 240, 0.8);
+    box-shadow: 0 96px 128px -16px rgba(0, 0, 0, 0.24), 0 -4px 128px -16px rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+    padding: 0px 24px 64px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    transition: 1200ms cubic-bezier(0.65, 0, 0.35, 1) 1200ms;
+}
+.modalContent {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.preload .modalContainer {
+    transform: translateY(128px);
+    opacity: 0;
+}
+.modalContent .icon {
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
+.modalContent span {
+    font-family: Roboto Mono;
+    font-size: 14px;
+    line-height: 2;
+    color: rgba(0, 0, 0, 0.56);
+    margin-top: 8px;
+    margin-bottom: 24px;
+    max-width: 320px;
+    text-align: center;
+}
+.modalContent hr {
+    width: 100%;
+    height: 1px;
+    max-width: 320px;
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+code {
+    padding: 2px 6px 3px 6px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 2px;
+    background-color: rgb(255, 210, 0);
+    min-width: 23px;
+}
+.startContainer {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

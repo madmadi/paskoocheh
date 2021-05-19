@@ -8,6 +8,8 @@ button {
     align-items: center;
     flex-shrink: 0;
     font-family: Roboto Mono;
+    font-size: 16px;
+    letter-spacing: 1px;
     white-space: nowrap;
     text-overflow: ellipsis;
     vertical-align: middle;
@@ -21,19 +23,34 @@ button {
     border: none;
     overflow: hidden;
 }
+
 button.button-lg {
     width: auto;
     height: 56px;
     padding: 12px;
 }
+
+button.button-primary {
+    background-color: rgba(255, 210, 0, 0.8);
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(2px);
+}
+
+button.button-primary.button-lg {
+    min-width: 148px;
+}
+
 button.icon-button {
     width: 56px;
     height: 56px;
     border-radius: 28px;
 }
+
 button.inline {
     background-color: rgba(255, 255, 255, 0);
 }
+
 button.icon-button .buttonBase {
     position: absolute;
     width: 56px;
@@ -44,17 +61,20 @@ button.icon-button .buttonBase {
     transform: scale(0);
     transition: transform 320ms ease, background-color 320ms ease, opacity 320ms ease;
 }
+
 button.icon-button:hover .buttonBase {
     transform: scale(1);
     opacity: 1;
     transition: transform 320ms ease, background-color 320ms ease, opacity 240ms ease;
 }
+
 button.icon-button.active .buttonBase {
     transform: scale(1);
     opacity: 1;
     background-color: rgb(0, 0, 0);
     transition: transform 320ms ease, background-color 320ms ease, opacity 240ms ease;
 }
+
 button.button-lg .icon {
     width: 32px;
     min-width: 32px;
