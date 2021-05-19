@@ -9,6 +9,7 @@ import {
   GridHelper,
   Vector3,
   Raycaster,
+  Vector2
 } from 'three';
 import './main.scss';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
@@ -59,7 +60,7 @@ function onKeyDown(event) {
       break;
 
     case 'Space':
-      if (canJump === true) velocity.y += 350;
+      if (canJump === true) velocity.y += (walk ? 350 : 700);
       canJump = false;
       break;
     default:
@@ -165,7 +166,7 @@ function init() {
 
   window.addEventListener('resize', onWindowResize, false);
 }
-
+const mouse = new Vector2();
 function animate() {
   requestAnimationFrame(animate);
 
@@ -175,9 +176,8 @@ function animate() {
     raycaster.ray.origin.copy(controls.getObject().position);
     raycaster.ray.origin.y -= 10;
 
-    const intersections = raycaster.intersectObjects(scene);
-
-    const onObject = intersections.length > 0;
+    raycaster.setFromCamera(mouse, camera);
+    const intersections = raycaster.intersectObjects(scene.children, true);
 
     const delta = (time - prevTime) / 1000;
 
@@ -193,13 +193,8 @@ function animate() {
     if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta * (walk ? 1 : 4);
     if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta * (walk ? 1 : 4);
 
-    if (onObject === true) {
-      velocity.y = Math.max(0, velocity.y);
-      canJump = true;
-    }
-
     controls.moveRight(-velocity.x * delta);
-    controls.moveForward(-velocity.z * delta);
+    if (!intersections.length) controls.moveForward(-velocity.z * delta);
 
     controls.getObject().position.y += (velocity.y * delta); // new behavior
 
