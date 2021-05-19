@@ -1,5 +1,7 @@
 $(document).ready(function () {
+    $("body").removeClass("preload");
     $('#burger').click(function () {
+        $(".backdrop").addClass("closed");
         $(".activeButton").toggleClass("active");
         if ($(".menuBase").hasClass("opened")) {
             $(".menuBase").removeClass("opened");
@@ -21,5 +23,14 @@ $(document).ready(function () {
     $('#backToMap').click(function () {
         $("#mapContainer").removeClass("hide");
         $("#aboutContainer").addClass("hide");
+    });
+    $('#closeModal').click(function () {
+        $(".backdrop").removeClass("opened");
+        $(".backdrop").addClass("closed");
+    });
+    $('#howTo').click(function () {
+        $(".backdrop").removeClass("closed");
+        $(".backdrop").addClass("opened");
+
     });
 });

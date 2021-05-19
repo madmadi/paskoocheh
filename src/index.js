@@ -147,19 +147,19 @@ function init() {
   controls = new PointerLockControls(camera, document.body);
   scene.add(controls.getObject());
 
-  const instructions = document.getElementById('instructions');
+  const startButton = document.getElementById('start');
 
   controls.addEventListener('lock', () => {
-    instructions.style.display = 'none';
+    startButton.style.display = 'none';
   });
 
   controls.addEventListener('unlock', () => {
-    instructions.style.display = '';
+    startButton.style.display = '';
   });
-  instructions.addEventListener('click', () => {
+  startButton.addEventListener('click', () => {
     controls.lock();
   });
-
+  
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('keyup', onKeyUp);
 

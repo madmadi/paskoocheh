@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -10,9 +11,9 @@
   <link rel="stylesheet" type="text/css" media="screen" href="public/css/icon.css">
   <link rel="stylesheet" type="text/css" media="screen" href="public/css/button.css">
   <script src="public/js/jquery.min.js"></script>
-  <script src="public/js/loadAnimation.js"></script>
   <script src="public/js/openMenu.js"></script>
 </head>
+
 <body class="preload">
   <div class="main">
     <div class="layout">
@@ -44,7 +45,49 @@
       <section class="content">
         <article>
           <div id="mapContainer" class="mapContainer">
-            <div class="noiseContainer"></div>
+            <div class="noiseContainer">
+            </div>
+            <div class="startContainer">
+              <button id="start" class="button-lg button-primary">start</button>
+            </div>
+          </div>
+          <div class="backdrop">
+            <div class="modalContainer">
+              <div class="sectionHeader">
+                <span>How to explore</span>
+                <button id="closeModal" class="button-lg inline icon-button  ">
+                  <div class="buttonBase"></div>
+                  <div class="icon close">
+                    <svg width="24px" height="24px" viewBox="0 0 24 24">
+                      <polygon
+                        points="15.899 6 11.656 10.243 7.414 6 6 7.415 10.243 11.657 6 15.9 7.414 17.314 11.656 13.071 15.899 17.314 17.314 15.9 13.071 11.657 17.314 7.415">
+                      </polygon>
+                    </svg>
+                  </div>
+                </button>
+              </div>
+              <div class="modalContent">
+                <div class="icon mouse">
+                  <svg width="24px" height="24px" viewBox="0 0 24 24">
+                    <path
+                      d="M12,2 C15.86,2 19,5.14 19,9 L19,15 C19,18.86 15.86,22 12,22 C8.14,22 5,18.86 5,15 L5,9 C5,5.14 8.14,2 12,2 Z M12,4 C9.243,4 7,6.243 7,9 L7,15 C7,17.757 9.243,20 12,20 C14.757,20 17,17.757 17,15 L17,9 C17,6.243 14.757,4 12,4 Z M13,7 L13,11 L11,11 L11,7 L13,7 Z"
+                      id="icon"></path>
+                  </svg>
+                </div>
+                <span>drag mouse to look around</span>
+                <hr>
+                <div class="icon move">
+                  <svg width="24px" height="24px" viewBox="0 0 24 24">
+                    <path
+                      d="M13.601,17.376 L15.015,18.79 L11.935,21.87 L8.855,18.79 L10.269,17.376 L11.935,19.042 L13.601,17.376 Z M18.7899,8.855 L21.8699,11.935 L18.7899,15.015 L17.3759,13.601 L19.0419,11.935 L17.3759,10.269 L18.7899,8.855 Z M5.08,8.855 L6.494,10.269 L4.828,11.935 L6.494,13.601 L5.08,15.015 L2,11.935 L5.08,8.855 Z M11.9353,10.2129 C12.8853,10.2129 13.6563,10.9839 13.6563,11.9349 C13.6563,12.8859 12.8853,13.6569 11.9353,13.6569 C10.9843,13.6569 10.2133,12.8859 10.2133,11.9349 C10.2133,10.9839 10.9843,10.2129 11.9353,10.2129 Z M11.935,2 L15.015,5.08 L13.601,6.494 L11.935,4.828 L10.269,6.494 L8.855,5.08 L11.935,2 Z"
+                      id="Combined-Shape"></path>
+                  </svg>
+                </div>
+                <span>press <code>w</code> <code>a</code> <code>s</code> <code>d</code> to wander</span>
+                <hr>
+                <span>you can always go back to real world by pressing <code>esc</code></span>
+              </div>
+            </div>
           </div>
           <div id="aboutContainer" class="pageContainer aboutContainer hide">
             <div class="sectionHeader">
@@ -76,7 +119,7 @@
           </div>
           <nav class="menuBase  ">
             <a id="aboutLink" class="navItem">About</a>
-            <a id="exploreLink" class="navItem">How to explore</a>
+            <a id="howTo" class="navItem">How to explore</a>
             <a id="teamLink" class="navItem">Team</a>
             <a id="contactLink" class="navItem">Contact</a>
           </nav>
@@ -85,4 +128,5 @@
     </div>
   </div>
 </body>
+
 </html>
