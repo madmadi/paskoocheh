@@ -13,6 +13,8 @@
     -webkit-backface-visibility: hidden;
 }
 
+ 
+
 .icon * {
     fill: rgb(0, 0, 0);
     transition: 240ms ease;
