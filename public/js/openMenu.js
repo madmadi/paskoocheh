@@ -1,6 +1,7 @@
 $(document).ready(function () {
     $("body").removeClass("preload");
     $('#burger').click(function () {
+        $(".backdrop").removeClass("opened");
         $(".backdrop").addClass("closed");
         $(".activeButton").toggleClass("active");
         if ($(".menuBase").hasClass("opened")) {
@@ -18,11 +19,27 @@ $(document).ready(function () {
     });
     $('#aboutLink').click(function () {
         $("#mapContainer").addClass("hide");
+        $("#teamContainer").addClass("hide");
+        $("#contactContainer").addClass("hide");
         $("#aboutContainer").removeClass("hide");
     });
-    $('#backToMap').click(function () {
+    $('#teamLink').click(function () {
+        $("#mapContainer").addClass("hide");
+        $("#aboutContainer").addClass("hide");
+        $("#contactContainer").addClass("hide");
+        $("#teamContainer").removeClass("hide");
+    });
+    $('#contactLink').click(function () {
+        $("#mapContainer").addClass("hide");
+        $("#aboutContainer").addClass("hide");
+        $("#teamContainer").addClass("hide");
+        $("#contactContainer").removeClass("hide");
+    });
+    $('.backToMap').click(function () {
         $("#mapContainer").removeClass("hide");
         $("#aboutContainer").addClass("hide");
+        $("#teamContainer").addClass("hide");
+        $("#contactContainer").addClass("hide");
     });
     $('#closeModal').click(function () {
         $(".backdrop").removeClass("opened");
@@ -31,6 +48,9 @@ $(document).ready(function () {
     $('#howTo').click(function () {
         $(".backdrop").removeClass("closed");
         $(".backdrop").addClass("opened");
-
+        $("#mapContainer").removeClass("hide");
+        $("#aboutContainer").addClass("hide");
+        $("#teamContainer").addClass("hide");
+        $("#contactContainer").addClass("hide");
     });
 });
