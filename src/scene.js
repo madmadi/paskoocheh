@@ -3,7 +3,6 @@ import {
   PerspectiveCamera,
   Color,
   DirectionalLight,
-  DirectionalLightHelper,
   HemisphereLight,
   HemisphereLightHelper,
 } from 'three';
@@ -29,7 +28,7 @@ export default function setupScene({ renderer }) {
   composer = new EffectComposer(renderer);
 
   camera = new PerspectiveCamera(-1000, window.innerWidth / window.innerHeight, 1, 10000);
-  camera.position.set(-250, 10, 500);
+  camera.position.set(200, 10, 1500);
 
   scene = new Scene();
   scene.background = new Color(0xf0e8e1);
@@ -50,21 +49,20 @@ export default function setupScene({ renderer }) {
 
   const hemiLight = new HemisphereLight(0xffffff, 0xffffff, 0.6);
   hemiLight.color.setHSL(30 / 360, 0.2, 0.61);
-  hemiLight.position.set(0, 50, 0);
+  hemiLight.position.set(0, 2000, 0);
   scene.add(hemiLight);
 
   const hemiLightHelper = new HemisphereLightHelper(hemiLight, 10);
   scene.add(hemiLightHelper);
 
-  const dirLight = new DirectionalLight(0xffffff, 1.75, 1000);
-  dirLight.color.setHSL(0.1, 1, 0.95);
-  dirLight.position.set(-1000, 1000, 0);
+  const dirLight = new DirectionalLight(0xffffff, 1.75, 2000);
+  dirLight.color.setHSL(30 / 360, 1, 0.95);
+  dirLight.position.set(-2000, 2000, 0);
   scene.add(dirLight);
 
   dirLight.castShadow = true;
-  dirLight.shadow.radius = 8;
-  dirLight.shadow.mapSize.width = 2048;
-  dirLight.shadow.mapSize.height = 2048;
+  dirLight.shadow.mapSize.width = 1024;
+  dirLight.shadow.mapSize.height = 1024;
 
   const d = 1500;
 
@@ -73,11 +71,8 @@ export default function setupScene({ renderer }) {
   dirLight.shadow.camera.top = d;
   dirLight.shadow.camera.bottom = -d;
 
-  dirLight.shadow.camera.far = 3500;
+  dirLight.shadow.camera.far = 4500;
   dirLight.shadow.bias = 0.00001;
-
-  const dirLightHelper = new DirectionalLightHelper(dirLight, 10);
-  scene.add(dirLightHelper);
 
   const loader = new GLTFLoader().setPath(MODELS_PATH);
   loader.setMeshoptDecoder(MeshoptDecoder);
