@@ -74,6 +74,12 @@ export default function setupScene({ renderer }) {
   dirLight.shadow.camera.far = 4500;
   dirLight.shadow.bias = 0.00001;
 
+  const loadingPercentElm = document.querySelector('#loadingPercent');
+  const starterElm = document.querySelector('#starter');
+  const loaderElm = document.querySelector('#loader');
+
+  starterElm.style.display = 'none';
+
   const loader = new GLTFLoader().setPath(MODELS_PATH);
   loader.setMeshoptDecoder(MeshoptDecoder);
   loader.load(MODEL, (gltf) => {
@@ -88,7 +94,13 @@ export default function setupScene({ renderer }) {
       }
     });
 
+    starterElm.style.display = '';
+    loaderElm.style.display = 'none';
+
     scene.add(gltf.scene);
+  }, (xhr) => {
+    const percentage = xhr.loaded / xhr.total;
+    loadingPercentElm.style.transform = `scaleX(${percentage})`;
   });
 
   Mousetrap.bind('g', () => { glitchPass.enabled = true; }, 'keydown');
