@@ -1,28 +1,23 @@
 import {
-  Scene,
-  PerspectiveCamera,
   WebGLRenderer,
   ACESFilmicToneMapping,
   sRGBEncoding,
-  PMREMGenerator,
-  Color,
-  GridHelper,
   Vector3,
   Raycaster,
-  Vector2
+  PCFSoftShadowMap,
+  Vector2,
 } from 'three';
-import './main.scss';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import setupScene from './scene';
+import './main.scss';
 
-const MODELS_PATH = '/public/models/';
-
-let camera;
-let scene;
 let renderer;
+let scene;
+let camera;
+let render;
 let controls;
+let rbtControls;
 let raycaster;
 
 let moveForward = false;
@@ -92,10 +87,6 @@ function onKeyUp(event) {
   }
 }
 
-function render() {
-  renderer.render(scene, camera);
-}
-
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -114,34 +105,20 @@ function init() {
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1;
   renderer.outputEncoding = sRGBEncoding;
+  renderer.shadowMap.enabled = true;
+  // to antialias the shadow
+  renderer.shadowMapType = PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
 
-  camera = new PerspectiveCamera(-1000, window.innerWidth / window.innerHeight, 1, 10000);
-  camera.position.set(-250, 10, 500);
+  ({ scene, camera, render } = setupScene({ renderer }));
 
-  const environment = new RoomEnvironment();
-  const pmremGenerator = new PMREMGenerator(renderer);
-
-  scene = new Scene();
-  scene.background = new Color(0xbbbbbb);
-  scene.environment = pmremGenerator.fromScene(environment).texture;
-
-  const grid = new GridHelper(500, 10, 0xffffff, 0xffffff);
-  grid.material.opacity = 0.5;
-  grid.material.depthWrite = false;
-  grid.material.transparent = true;
-  scene.add(grid);
-
-  const loader = new GLTFLoader().setPath(MODELS_PATH);
-  loader.setMeshoptDecoder(MeshoptDecoder);
-  loader.load('Farhang.glb', (gltf) => {
-    // eslint-disable-next-line no-param-reassign
-    gltf.scene.position.y = 0;
-
-    scene.add(gltf.scene);
-
-    render();
-  });
+  rbtControls = new OrbitControls(camera, renderer.domElement);
+  rbtControls.autoRotate = true;
+  rbtControls.autoRotateSpeed = 5;
+  rbtControls.minPolarAngle = 0.8;
+  rbtControls.maxPolarAngle = Math.PI / 2.5;
+  // rbtControls.enabled = false;
+  rbtControls.minDistance = 2000;
 
   controls = new PointerLockControls(camera, document.body);
   scene.add(controls.getObject());
@@ -154,11 +131,12 @@ function init() {
 
   controls.addEventListener('unlock', () => {
     startButton.style.display = '';
+    startButton.innerText = 'resume';
   });
   startButton.addEventListener('click', () => {
     controls.lock();
   });
-  
+
   document.addEventListener('keydown', onKeyDown);
   document.addEventListener('keyup', onKeyUp);
 
@@ -167,6 +145,15 @@ function init() {
   window.addEventListener('resize', onWindowResize, false);
 }
 const mouse = new Vector2();
+
+function animateOrbit() {
+  if (!controls.isLocked) {
+    requestAnimationFrame(animateOrbit);
+    rbtControls.update();
+    renderer.render(scene, camera);
+  }
+}
+
 function animate() {
   requestAnimationFrame(animate);
 
@@ -190,8 +177,8 @@ function animate() {
     direction.x = Number(moveRight) - Number(moveLeft);
     direction.normalize(); // this ensures consistent movements in all directions
 
-    if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta * (walk ? 1 : 4);
-    if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta * (walk ? 1 : 4);
+    if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta * (walk ? 2 : 4);
+    if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta * (walk ? 2 : 4);
 
     controls.moveRight(-velocity.x * delta);
     if (!intersections.length) controls.moveForward(-velocity.z * delta);
@@ -207,8 +194,9 @@ function animate() {
 
   prevTime = time;
 
-  renderer.render(scene, camera);
+  render();
 }
 
 init();
+animateOrbit();
 animate();
