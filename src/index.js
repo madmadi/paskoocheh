@@ -5,6 +5,7 @@ import {
   Vector3,
   Raycaster,
   PCFSoftShadowMap,
+  Vector2,
 } from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
 import setupScene from './scene';
@@ -52,7 +53,7 @@ function onKeyDown(event) {
       break;
 
     case 'Space':
-      if (canJump === true) velocity.y += 350;
+      if (canJump === true) velocity.y += (walk ? 350 : 700);
       canJump = false;
       break;
     default:
@@ -112,16 +113,16 @@ function init() {
   controls = new PointerLockControls(camera, document.body);
   scene.add(controls.getObject());
 
-  const instructions = document.getElementById('instructions');
+  const startButton = document.getElementById('start');
 
   controls.addEventListener('lock', () => {
-    instructions.style.display = 'none';
+    startButton.style.display = 'none';
   });
 
   controls.addEventListener('unlock', () => {
-    instructions.style.display = '';
+    startButton.style.display = '';
   });
-  instructions.addEventListener('click', () => {
+  startButton.addEventListener('click', () => {
     controls.lock();
   });
 
@@ -132,7 +133,7 @@ function init() {
 
   window.addEventListener('resize', onWindowResize, false);
 }
-
+const mouse = new Vector2();
 function animate() {
   requestAnimationFrame(animate);
 
@@ -142,9 +143,8 @@ function animate() {
     raycaster.ray.origin.copy(controls.getObject().position);
     raycaster.ray.origin.y -= 10;
 
-    const intersections = raycaster.intersectObjects(scene);
-
-    const onObject = intersections.length > 0;
+    raycaster.setFromCamera(mouse, camera);
+    const intersections = raycaster.intersectObjects(scene.children, true);
 
     const delta = (time - prevTime) / 1000;
 
@@ -160,13 +160,8 @@ function animate() {
     if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta * (walk ? 2 : 4);
     if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta * (walk ? 2 : 4);
 
-    if (onObject === true) {
-      velocity.y = Math.max(0, velocity.y);
-      canJump = true;
-    }
-
     controls.moveRight(-velocity.x * delta);
-    controls.moveForward(-velocity.z * delta);
+    if (!intersections.length) controls.moveForward(-velocity.z * delta);
 
     controls.getObject().position.y += (velocity.y * delta); // new behavior
 
