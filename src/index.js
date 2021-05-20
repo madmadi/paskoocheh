@@ -131,6 +131,7 @@ function init() {
 
   controls.addEventListener('unlock', () => {
     startButton.style.display = '';
+    startButton.innerText = 'resume';
   });
   startButton.addEventListener('click', () => {
     controls.lock();
