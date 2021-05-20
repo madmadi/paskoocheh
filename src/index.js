@@ -30,6 +30,7 @@ let walk = true;
 let prevTime = performance.now();
 const velocity = new Vector3();
 const direction = new Vector3();
+const mouse = new Vector2();
 
 function onKeyDown(event) {
   walk = !event.shiftKey;
@@ -144,13 +145,12 @@ function init() {
 
   window.addEventListener('resize', onWindowResize, false);
 }
-const mouse = new Vector2();
 
 function animateOrbit() {
   if (!controls.isLocked) {
     requestAnimationFrame(animateOrbit);
     rbtControls.update();
-    renderer.render(scene, camera);
+    render();
   }
 }
 
