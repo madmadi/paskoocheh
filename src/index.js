@@ -157,8 +157,8 @@ function animate() {
     direction.x = Number(moveRight) - Number(moveLeft);
     direction.normalize(); // this ensures consistent movements in all directions
 
-    if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta * (walk ? 1 : 4);
-    if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta * (walk ? 1 : 4);
+    if (moveForward || moveBackward) velocity.z -= direction.z * 400.0 * delta * (walk ? 2 : 4);
+    if (moveLeft || moveRight) velocity.x -= direction.x * 400.0 * delta * (walk ? 2 : 4);
 
     if (onObject === true) {
       velocity.y = Math.max(0, velocity.y);

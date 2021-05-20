@@ -82,6 +82,8 @@ export default function setupScene({ renderer }) {
   const loader = new GLTFLoader().setPath(MODELS_PATH);
   loader.setMeshoptDecoder(MeshoptDecoder);
   loader.load(MODEL, (gltf) => {
+    // eslint-disable-next-line no-param-reassign
+    gltf.scene.position.y = -80;
     gltf.scene.traverse((node) => {
       if (node.isMesh) {
         // eslint-disable-next-line no-param-reassign
