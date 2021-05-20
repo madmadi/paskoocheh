@@ -27,6 +27,7 @@
   "author": "mo@madmadi.me",
   "license": "ISC",
   "dependencies": {
+    "mousetrap": "^1.6.5",
     "three": "^0.128.0"
   }
 }
