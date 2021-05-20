@@ -8,6 +8,7 @@ import {
   Vector2,
 } from 'three';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import setupScene from './scene';
 import './main.scss';
 
@@ -16,6 +17,7 @@ let scene;
 let camera;
 let render;
 let controls;
+let rbtControls;
 let raycaster;
 
 let moveForward = false;
@@ -110,6 +112,14 @@ function init() {
 
   ({ scene, camera, render } = setupScene({ renderer }));
 
+  rbtControls = new OrbitControls(camera, renderer.domElement);
+  rbtControls.autoRotate = true;
+  rbtControls.autoRotateSpeed = 5;
+  rbtControls.minPolarAngle = 0.8;
+  rbtControls.maxPolarAngle = Math.PI / 2.5;
+  // rbtControls.enabled = false;
+  rbtControls.minDistance = 2000;
+
   controls = new PointerLockControls(camera, document.body);
   scene.add(controls.getObject());
 
@@ -121,6 +131,7 @@ function init() {
 
   controls.addEventListener('unlock', () => {
     startButton.style.display = '';
+    startButton.innerText = 'resume';
   });
   startButton.addEventListener('click', () => {
     controls.lock();
@@ -134,6 +145,15 @@ function init() {
   window.addEventListener('resize', onWindowResize, false);
 }
 const mouse = new Vector2();
+
+function animateOrbit() {
+  if (!controls.isLocked) {
+    requestAnimationFrame(animateOrbit);
+    rbtControls.update();
+    renderer.render(scene, camera);
+  }
+}
+
 function animate() {
   requestAnimationFrame(animate);
 
@@ -178,4 +198,5 @@ function animate() {
 }
 
 init();
+animateOrbit();
 animate();
