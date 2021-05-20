@@ -1,26 +1,19 @@
 import {
-  Scene,
-  PerspectiveCamera,
   WebGLRenderer,
   ACESFilmicToneMapping,
   sRGBEncoding,
-  PMREMGenerator,
-  Color,
-  GridHelper,
   Vector3,
   Raycaster,
+  PCFSoftShadowMap,
 } from 'three';
-import './main.scss';
-import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment';
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module';
+import setupScene from './scene';
+import './main.scss';
 
-const MODELS_PATH = '/public/models/';
-
-let camera;
-let scene;
 let renderer;
+let scene;
+let camera;
+let render;
 let controls;
 let raycaster;
 
@@ -91,10 +84,6 @@ function onKeyUp(event) {
   }
 }
 
-function render() {
-  renderer.render(scene, camera);
-}
-
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -113,34 +102,12 @@ function init() {
   renderer.toneMapping = ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1;
   renderer.outputEncoding = sRGBEncoding;
+  renderer.shadowMap.enabled = true;
+  // to antialias the shadow
+  renderer.shadowMapType = PCFSoftShadowMap;
   container.appendChild(renderer.domElement);
 
-  camera = new PerspectiveCamera(-1000, window.innerWidth / window.innerHeight, 1, 10000);
-  camera.position.set(-250, 10, 500);
-
-  const environment = new RoomEnvironment();
-  const pmremGenerator = new PMREMGenerator(renderer);
-
-  scene = new Scene();
-  scene.background = new Color(0xbbbbbb);
-  scene.environment = pmremGenerator.fromScene(environment).texture;
-
-  const grid = new GridHelper(500, 10, 0xffffff, 0xffffff);
-  grid.material.opacity = 0.5;
-  grid.material.depthWrite = false;
-  grid.material.transparent = true;
-  scene.add(grid);
-
-  const loader = new GLTFLoader().setPath(MODELS_PATH);
-  loader.setMeshoptDecoder(MeshoptDecoder);
-  loader.load('Farhang.glb', (gltf) => {
-    // eslint-disable-next-line no-param-reassign
-    gltf.scene.position.y = 0;
-
-    scene.add(gltf.scene);
-
-    render();
-  });
+  ({ scene, camera, render } = setupScene({ renderer }));
 
   controls = new PointerLockControls(camera, document.body);
   scene.add(controls.getObject());
@@ -212,7 +179,7 @@ function animate() {
 
   prevTime = time;
 
-  renderer.render(scene, camera);
+  render();
 }
 
 init();
