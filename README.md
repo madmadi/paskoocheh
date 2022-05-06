@@ -5,25 +5,27 @@
 Interactive 3D model of Farhang square neighborhood on the web, developed in a 2-days long Hackathon program.
 
 ## Clone the repo
-clone the repo, install its dependencies and
-don't forget to **rename** the `project directory` and `package.json` file
+
+Clone and instal the dependencies.
+
 ```console
-$ git clone https://github.com/madmadi/instant-js-app-boilerplate
-$ cd instant-js-app-boilerplate
+$ git clone https://github.com/madmadi/paskoocheh.git
+$ cd paskoocheh
 $ npm install
 ```
 
 ## Start dev server
-to develop and preview your app run the command below to start dev-server
-with live-reladoing at `localhost:8080`
+
+Default port is 8080 so it will be served at `localhost:8080`.
+
 ```console
 $ npm run serve
 ```
 
-## Other scripts
-below scripts may would be helpful
+## Build
+
+The output will be saved in docs/ directory and it will be served by Github pages.
+
 ```console
-$ npm run lint # run eslint to lint the /src
-$ npm run lint:fix # auto fix lint issues
-$ npm run build # build the /src to /dist with production mode
+$ npm run build
 ```
