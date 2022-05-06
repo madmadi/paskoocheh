@@ -27,7 +27,7 @@ let glitchPass;
 export default function setupScene({ renderer }) {
   composer = new EffectComposer(renderer);
 
-  camera = new PerspectiveCamera(-1000, window.innerWidth / window.innerHeight, 1, 10000);
+  camera = new PerspectiveCamera(-1000, window.innerWidth / window.innerHeight, 1, 4000);
   camera.position.set(200, 10, 1500);
 
   scene = new Scene();

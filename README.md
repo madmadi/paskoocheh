@@ -1,9 +1,8 @@
-# Instant JS App Boilerplate
-A JS app boilerplate to instantly test or prototype something
-using webpack-dev-server and html-webpack-plugin with minimum configs.
+# Paskoocheh
 
-in simple words if you want to quickly test some npm library or prototype a JS app instantly
-with live-reloading in zero-config, this small pre-configured project can help.
+[madmadi.github.io/paskoocheh](https://madmadi.github.io/paskoocheh/)
+
+Interactive 3D model of Farhang square neighborhood on the web, developed in a 2-days long Hackathon program.
 
 ## Clone the repo
 clone the repo, install its dependencies and
